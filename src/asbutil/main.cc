@@ -44,9 +44,8 @@ void asbparse(CMemoryFStream &asb) {
       asb.Read(&sb->line, sizeof(sb->line));
       asb.Read(&paramCount, sizeof(paramCount));
 
-      blockInfo.append(std::format("block {:#x} : {{ type = {}, size = {:#x}, "
-                                   "tag = {}, paramCount = {:#x}",
-                                   i, type, size, tagname.data(), paramCount));
+      blockInfo.append(std::format("[{}",
+                                   tagname.data()));
       for (auto j = 0; j < paramCount; ++j) {
         u32 size = 0;
         asb.Read(&size, sizeof(size));
@@ -61,13 +60,12 @@ void asbparse(CMemoryFStream &asb) {
         asb.Read(value.data(), size2 + 1);
 
         blockInfo.append(
-            std::format(", {} = \"{}\"", key.data(), value.data()));
+            std::format(" {}=\"{}\"", key.data(), value.data()));
       }
-      blockInfo.append("}");
+      blockInfo.append("]");
       spdlog::info(blockInfo);
     } else if (type == 1) {
-      spdlog::info("block {:#x} : {{ type = {}, size = {:#x}, tag = {}}}", i,
-                   type, size, tagname.data());
+      spdlog::info("[{}]",tagname.data());
     }
   }
 };
