@@ -23,7 +23,7 @@ void asbparse(CMemoryFStream &asb) {
 
   auto version = header[3];
   asb.Read(&blockCount, sizeof(blockCount));
-  spdlog::info("blockCount: {:#x}", blockCount);
+  // spdlog::info("blockCount: {:#x}", blockCount);
 
   for (auto i = 0; i < blockCount; ++i) {
     i32 type = 0;
@@ -65,7 +65,7 @@ void asbparse(CMemoryFStream &asb) {
       blockInfo.append("]");
       spdlog::info(blockInfo);
     } else if (type == 1) {
-      spdlog::info("[{}]",tagname.data());
+      spdlog::info("*{}",tagname.data());
     }
   }
 };
@@ -73,6 +73,7 @@ void asbparse(CMemoryFStream &asb) {
 int main(int argc, char **argv) {
   if (argc != 2)
     return 1;
+  spdlog::set_pattern("%v");
   FILE *handle = fopen(argv[1], "rb");
   if (!handle) {
     spdlog::error("cannot open file!");
